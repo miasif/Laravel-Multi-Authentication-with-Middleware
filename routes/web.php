@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Author\AuthorDashboardController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +30,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/change-password', [ChangePasswordController::class, 'index'])->name('password.change');
 Route::post('/change-password', [ChangePasswordController::class, 'changepassword'])->name('password.update');
 
-
+Route::group(['as'=>'admin.','prefix'=>'admin', 'namespace'=>'Admin','middleware'=>['auth','admin']],
+function(){
+    Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
+});
+Route::group(['as'=>'author.','prefix'=>'author', 'namespace'=>'Author','middleware'=>['auth','author']],
+function(){
+    Route::get('dashboard',[AuthorDashboardController::class,'index'])->name('dashboard');
+});
